@@ -1,25 +1,26 @@
-module.exports = function (context, request) {
+module.exports = function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
     context.log('Bindings', context.bindings);
-    context.log('Request', request);
+    context.log('Request', req);
 
-    const id = parseInt(context.bindingData.id);
+  context.log('JavaScript HTTP trigger function processed a request.');
 
-    let advocateService = require('../services/advocates');
-    let filters = require('../services/filters');
-    let data = advocateService.getAdvocates();
-    let response = {};
+  const id = parseInt(context.bindingData.id);
+  let advocateService = require('../services/advocates');
+  let filters = require('../services/filters');
+  let data = advocateService.getAdvocates();
 
-    if (id) {
-      const advocate = filters.getMatch(data.results, id);
-      response = {
-        body: advocate
-      };
+  if (id) {
+      const advocate = filters.getMatch(data.results, id)
+        context.res = {
+            // status: 200, /* Defaults to 200 */
+          body: advocate
+        };
     }
     else {
-      response = {
-        body: data
-      };
+        context.res = {
+            body: data
+        };
     }
-    context.done(null, response);
+    context.done();
   };
